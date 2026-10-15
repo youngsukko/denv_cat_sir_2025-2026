@@ -63,6 +63,7 @@ xlabs  = {'Past 10-year cumulative incidences (2016-2025)', ['Proportion ' char(
 figure('Units', 'centimeters', 'Position', [0 0 18 7], 'PaperPositionMode', 'auto');
 tiledlayout(1, 2, 'TileSpacing', 'compact', 'Padding', 'compact')
 fprintf('\nCorrelation with annual DALYs per 100K (Q50)\n');
+corr_rp = zeros(2, 2);   % [r p] for each indicator
 for k = 1:2
     nexttile(k)
     x  = xvals{k};
@@ -82,6 +83,7 @@ for k = 1:2
     text(0.05, 0.75, {sprintf('r = %.2f', rv); ptxt}, 'Units', 'normalized', ...
          'VerticalAlignment', 'top', 'FontName', 'SansSerif', 'FontSize', 9)
     fprintf('  %s: r = %.3f, p = %.4f\n', xlabs{k}, rv, pv);
+    corr_rp(k, :) = [rv pv];
     xlabel(xlabs{k}, 'FontSize', 9)
     ylabel(['Annual DALY per 100K, 2026' char(8211) '2030'], 'FontSize', 9)
     set(gca, 'FontName', 'SansSerif', 'FontSize', 9); box on
@@ -90,6 +92,13 @@ for k = 1:2
     end
 end
 save_figure(cfg, 'fig3E-F_daly_scatter')
+
+write_numbers(cfg, 'M06_no_vaccine', {
+    'Correlation r: past 10-year incidence vs annual DALYs per 100K', corr_rp(1, 1), NaN, NaN, sprintf('p = %.4g', corr_rp(1, 2))
+    'Correlation r: proportion <= 1 prior infection (2026) vs annual DALYs per 100K', corr_rp(2, 1), NaN, NaN, sprintf('p = %.4g', corr_rp(2, 2))});
+writetable(table(cfg.state_codes(cfg.reg_order)', 100 * prop_le1(cfg.reg_order), past_inc(cfg.reg_order), ...
+                 'VariableNames', {'state', 'pct_le1_prior_infection_2026', 'past10y_incidence_per100k'}), ...
+           fullfile(cfg.table_dir, 'state_indicators_2026.csv'))
 
 plot_region_map_inset(cfg);
 exportgraphics(gcf, fullfile(cfg.fig_dir, 'fig3F_inset_region_map.png'), 'Resolution', 600, ...

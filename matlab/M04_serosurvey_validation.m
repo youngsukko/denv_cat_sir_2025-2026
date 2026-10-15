@@ -74,6 +74,59 @@ for f = 1:size(panels, 1)
     save_figure(cfg, ['figS9_serosurvey_' panels{f, 4}])
 end
 
+%% Survey values vs model 95% CrI, for review of the overlap statement in the Results
+%  Each survey age interval is compared with the model CrI over the model age
+%  groups whose lower bound lies in the interval (the nearest group if none).
+rows = {};
+survey_id = 0;
+for f = 1:size(panels, 1)
+    surveys = panels{f, 1};
+    for k = 1:size(surveys, 1)
+        survey_id = survey_id + 1;
+        [code, yr, breaks, prev, style] = surveys{k, :};
+        si   = find(strcmp(cfg.state_codes, code));
+        ti   = max(0, yr - cfg.years(1));
+        band = model_band(d, si, ti, lo_idx, hi_idx);   % rows: lo, median, hi
+        if strcmp(style, 'range'); n_int = 1; else; n_int = numel(breaks) - 1; end
+        for i = 1:n_int
+            switch style
+                case 'range';    a0 = 0;         a1 = 81;          v = prev;
+                case 'multibin'; a0 = breaks(i); a1 = breaks(i+1); v = prev(:, i);
+                otherwise;       a0 = breaks(i); a1 = breaks(i+1); v = prev(i);
+            end
+            in = cfg.age_lower >= a0 & cfg.age_lower < a1;
+            if ~any(in)
+                [~, j] = min(abs(cfg.age_lower - (a0 + a1) / 2)); in(j) = true;
+            end
+            m_lo = min(band(1, in)); m_hi = max(band(3, in));
+            rows(end+1, :) = {survey_id, panels{f, 4}, code, yr, style, a0, a1, min(v), max(v), ...
+                              m_lo, mean(band(2, in)), m_hi, max(v) >= m_lo && min(v) <= m_hi}; %#ok<SAGROW>
+        end
+    end
+end
+cmp = cell2table(rows, 'VariableNames', {'survey_id', 'region', 'state', 'year', 'style', 'age_from', 'age_to', ...
+    'survey_min', 'survey_max', 'model_lo95', 'model_median', 'model_hi95', 'overlap'});
+writetable(cmp, fullfile(cfg.table_dir, 'serosurvey_comparison.csv'))
+
+g = findgroups(cmp.survey_id);   % one group per survey panel
+survey_any = splitapply(@any, cmp.overlap, g);
+survey_all = splitapply(@all, cmp.overlap, g);
+n_surveys  = numel(survey_any);
+write_numbers(cfg, 'M04_serosurvey', {
+    'Surveys with any age interval overlapping the model 95% CrI', sum(survey_any), NaN, NaN, sprintf('out of %d panels', n_surveys)
+    'Surveys with all age intervals overlapping the model 95% CrI', sum(survey_all), NaN, NaN, sprintf('out of %d panels', n_surveys)});
+
+function band = model_band(d, si, ti, lo_idx, hi_idx)
+% [3 x A5] lower 95%, median and upper 95% of the proportion with >= 1 prior infection
+if ti == 0
+    p_band = squeeze(1 - d.op_seroposall_pre_0(:, si, :));
+else
+    p_band = squeeze(1 - d.op_seroposall_0(:, si, ti, :));
+end
+p_s  = sort(p_band);
+band = [p_s(lo_idx, :); median(p_s); p_s(hi_idx, :)];
+end
+
 function draw_survey_panel(d, si, ti, ages, breaks, prev, style, lo_idx, hi_idx, ...
                            col_model, col_model_light, col_survey, title_str)
 if ti == 0

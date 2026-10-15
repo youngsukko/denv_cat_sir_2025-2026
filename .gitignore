@@ -14,7 +14,8 @@ results_big/
 stan/*
 !stan/*.stan
 
-# MATLAB outputs and autosave files
-matlab/output/
+# MATLAB outputs (figures and simulation files); CSV tables are tracked for review
+matlab/output/*
+!matlab/output/tables/
 *.asv
 *.m~

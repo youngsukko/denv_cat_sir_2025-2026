@@ -301,3 +301,8 @@ end
 fprintf('\nNational proportion with >= 1 prior infection (median [95%% CrI])\n');
 fprintf('  start of 2000: %.1f%% [%.1f, %.1f]\n', 100 * [median(p2000), quantile(p2000, [0.025 0.975])]);
 fprintf('  end of 2025:   %.1f%% [%.1f, %.1f]\n', 100 * [median(p2025), quantile(p2025, [0.025 0.975])]);
+q2000 = quantile(p2000, [0.025 0.975]);
+q2025 = quantile(p2025, [0.025 0.975]);
+write_numbers(cfg, 'M02_catalytic', {
+    'National % with >= 1 prior infection, start of 2000', 100*median(p2000), 100*q2000(1), 100*q2000(2), 'median [95% CrI], population-weighted'
+    'National % with >= 1 prior infection, end of 2025',   100*median(p2025), 100*q2025(1), 100*q2025(2), 'median [95% CrI], population-weighted'});

@@ -69,14 +69,35 @@ save_figure(cfg, 'fig5_mixed_strategy')
 
 %% Results text: nationwide averting ratios, Q50 [range over Q25-Q75]
 fprintf('\nNationwide averting ratio (%%), Q50 [range over R0 Q25-Q75]\n');
+rows = {};
 for w_target = [1.0 0.6]
     [~, wi] = min(abs(w_grid - w_target));
     fprintf('Children share %.0f%%\n', 100 * w_grid(wi));
     for m = 1:4
         a = averting_ratio(base, mix, true(S, 1), m);
         fprintf('  %-16s %.2f [%.2f, %.2f]\n', ylab{m}, a(2, wi), min(a([1 3], wi)), max(a([1 3], wi)));
+        rows(end+1, :) = {sprintf('Nationwide %s averting ratio (%%), %.0f%% to children', ylab{m}, 100 * w_grid(wi)), ...
+                          a(2, wi), min(a([1 3], wi)), max(a([1 3], wi)), 'Q50 [range over R0 Q25-Q75]'}; %#ok<SAGROW>
     end
 end
+write_numbers(cfg, 'M11_mixed_strategy', rows)
+
+% all curves of Fig. 5 (and the Q25/Q75 scenarios) in long format
+areas = [cfg.region_short, {'Nationwide'}];
+curve = {};
+for r = 1:6
+    if r <= 5; idx = cfg.region_of == r; else; idx = true(S, 1); end
+    for m = 1:4
+        a = averting_ratio(base, mix, idx, m);
+        for rc = 1:3
+            for wi = 1:nW
+                curve(end+1, :) = {areas{r}, ylab{m}, cfg.R0_names{rc}, w_grid(wi), a(rc, wi)}; %#ok<SAGROW>
+            end
+        end
+    end
+end
+writetable(cell2table(curve, 'VariableNames', {'area', 'outcome', 'R0', 'children_share', 'averting_ratio_pct'}), ...
+           fullfile(cfg.table_dir, 'mixed_strategy_averting_ratios.csv'))
 
 function a = averting_ratio(base, mix, idx, m)
 % percentage of outcome m averted in the states idx: [3 (R0) x numel(w_grid)]

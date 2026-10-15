@@ -133,3 +133,20 @@ end
 writetable(cell2table(c, 'VariableNames', {'doses_total', 'doses_per1000_children'}, ...
            'RowNames', cfg.state_codes(cfg.reg_order)), ...
            fullfile(cfg.table_dir, 'tableS10_vaccine_distribution.csv'), 'WriteRowNames', true)
+
+%% Numbers quoted in the text
+rows = {};
+for m = 1:4
+    tot = squeeze(sum(averted.(bod_names{m}), 2));   % [3 (R0) x 2 (VE)]
+    for vi = 1:2
+        rows(end+1, :) = {sprintf('%s averted per 1,000 vaccinated, %s VE', bod_names{m}, cfg.ve_labels{vi}), ...
+                          tot(2, vi), min(tot([1 3], vi)), max(tot([1 3], vi)), 'Q50 [range over R0 Q25-Q75]'}; %#ok<SAGROW>
+    end
+    rel = (tot(:, 2) ./ tot(:, 1) - 1) * 100;
+    rows(end+1, :) = {sprintf('%s averted, Daniels relative to Shen (%%)', bod_names{m}), ...
+                      rel(2), min(rel([1 3])), max(rel([1 3])), 'same R0 scenario, Q50 [range]'}; %#ok<SAGROW>
+end
+rows(end+1, :) = {'Doses over the horizon / population aged 5-14 in 2025 (%)', ...
+                  100 * cfg.annual_doses * cfg.n_sim_years / sum(children_pop), NaN, NaN, ...
+                  sprintf('%g doses per year x %d years', cfg.annual_doses, cfg.n_sim_years)};
+write_numbers(cfg, 'M08_baseline_vaccination', rows)

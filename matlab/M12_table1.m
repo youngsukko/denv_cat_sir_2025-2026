@@ -84,3 +84,49 @@ for vi = 1:2
     writetable(tbl, f, 'WriteRowNames', true)
     fprintf('Saved: %s\n', f);
 end
+
+%% Long-format results for review, and the comparisons quoted in the text
+long = {};
+for vi = 1:2
+    for st = 1:n_st
+        for rc = 1:3
+            for m = 1:4
+                a   = averted(st, rc, m, vi);
+                pk  = a / vactot(st);
+                pk0 = averted(1, rc, m, vi) / vactot(1);   % baseline strategy, same VE and R0
+                long(end+1, :) = {cfg.ve_labels{vi}, strategy_names{st}, cfg.R0_names{rc}, bod_names{m}, ...
+                                  a, pk, 100 * (pk / pk0 - 1)}; %#ok<SAGROW>
+            end
+        end
+    end
+end
+long_tbl = cell2table(long, 'VariableNames', {'VE', 'strategy', 'R0', 'outcome', 'averted_total', ...
+                                              'averted_per1000_vaccinated', 'pct_change_vs_baseline_per1000'});
+writetable(long_tbl, fullfile(cfg.table_dir, 'table1_long.csv'))
+
+rows = {};
+for st = 2:3
+    for m = [4 3]   % DALYs, deaths
+        sel  = strcmp(long_tbl.strategy, strategy_names{st}) & strcmp(long_tbl.outcome, bod_names{m});
+        shen = sel & strcmp(long_tbl.VE, 'Shen');
+        v_sh = long_tbl.pct_change_vs_baseline_per1000(shen);   % Q25, Q50, Q75
+        v_all = long_tbl.pct_change_vs_baseline_per1000(sel);
+        rows(end+1, :) = {sprintf('%s, %s per 1,000 vaccinated vs baseline (%%), Shen', strategy_names{st}, bod_names{m}), ...
+                          v_sh(2), min(v_sh([1 3])), max(v_sh([1 3])), 'Q50 [range over R0]'}; %#ok<SAGROW>
+        rows(end+1, :) = {sprintf('%s, %s per 1,000 vaccinated vs baseline (%%), Shen and Daniels', strategy_names{st}, bod_names{m}), ...
+                          v_sh(2), min(v_all), max(v_all), 'Shen Q50 [range over R0 and VE]'}; %#ok<SAGROW>
+    end
+end
+target_pop = [sum(obs.pop_2025(:, cfg.target_ages.children), 'all'), sum(obs.pop_2025(:, cfg.target_ages.elderly), 'all'), ...
+              sum(obs.pop_2025(:, cfg.target_ages.mass), 'all')];
+cov_cases  = {'children (5-14), 5M per year', annual_total(1), target_pop(1)
+              'elderly (60+), 5M per year',   annual_total(3), target_pop(2)
+              'ages 5-59, 10M per year',       annual_total(4), target_pop(3)
+              'ages 5-59, 20M per year',       annual_total(5), target_pop(3)
+              'ages 5-59, 30M per year',       annual_total(6), target_pop(3)};
+for k = 1:size(cov_cases, 1)
+    rows(end+1, :) = {sprintf('Coverage: doses per year / 2025 population, %s (%%)', cov_cases{k, 1}), ...
+                      100 * cov_cases{k, 2} / cov_cases{k, 3}, NaN, NaN, ...
+                      sprintf('over %d years: %.1f%%', ny, 100 * ny * cov_cases{k, 2} / cov_cases{k, 3})}; %#ok<SAGROW>
+end
+write_numbers(cfg, 'M12_table1', rows)
