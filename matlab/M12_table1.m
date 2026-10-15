@@ -23,8 +23,8 @@ mass_frac = mass_pop / sum(mass_pop);   % mass vaccination: same coverage of age
 strategy_names = {'Children, current distribution (baseline)', 'Children, DALY-optimized', ...
                   'Elderly, DALY-optimized', 'Mass vaccination 10M', 'Mass vaccination 20M', ...
                   'Mass vaccination 30M'};
-strategy_ages  = {cfg.target_ages.children, cfg.target_ages.children, cfg.target_ages.elderly, ...
-                  cfg.target_ages.mass, cfg.target_ages.mass, cfg.target_ages.mass};
+strategy_vacorder = [cfg.vacorder.children, cfg.vacorder.children, cfg.vacorder.elderly, ...
+                     cfg.vacorder.mass, cfg.vacorder.mass, cfg.vacorder.mass];
 annual_total   = [cfg.annual_doses, cfg.annual_doses, cfg.annual_doses, cfg.mass_doses];
 n_st = numel(strategy_names);
 bod_names = {'case', 'hosp', 'dead', 'daly'};
@@ -56,7 +56,7 @@ for vi = 1:2
             fprintf('[%s] %s, R0 %s\n', cfg.ve_labels{vi}, strategy_names{st}, cfg.R0_names{rc});
             total = zeros(1, 4);
             for si = 1:S
-                out = sir_simulate(p, sir_in, si, rc, struct('idx', strategy_ages{st}, 'dose', doses(si)));
+                out = sir_simulate(p, sir_in, si, rc, struct('vacc', doses(si), 'vacorder', strategy_vacorder(st)));
                 total = total + cellfun(@(f) sum(out.(f)), bod_names);
             end
             averted(st, rc, :, vi) = base(rc, :) - total;

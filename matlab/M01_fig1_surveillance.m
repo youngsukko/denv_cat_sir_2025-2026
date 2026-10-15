@@ -3,7 +3,7 @@
 %  The workflow diagram around these panels was drawn by hand.
 %
 %  Input : data/processed (R pipeline), matlab/data/shapefile
-%  Output: output/figures/fig1_incidence_map.png, fig1_age_distribution.png
+%  Output: output/figures/fig1_incidence_map.jpg, fig1_age_distribution.jpg
 
 clear; close all; clc;
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));

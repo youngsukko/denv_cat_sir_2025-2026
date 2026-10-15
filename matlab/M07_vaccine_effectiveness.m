@@ -1,7 +1,7 @@
 %% Fig. S11 and Table S9: vaccine effectiveness from Daniels and Shen and the
 %  waning curve implied by the three vaccine-derived immunity states.
 %
-%  Output: output/figures/figS11_vaccine_effectiveness.png
+%  Output: output/figures/figS11_vaccine_effectiveness.jpg
 %          output/tables/tableS9_vaccine_effectiveness.csv
 
 clear; close all; clc;

@@ -121,11 +121,11 @@ differ slightly between runs; they are tracked so that M10-M12 reproduce the pap
 | Fig. 1 (map, age distribution) | M01 | `figures/fig1_*` |
 | Fig. 2A-F | M02 | `figures/fig2*` |
 | Fig. 3A-F (incl. inset map) | M06 | `figures/fig3*` |
-| Fig. 4 | M08 | `figures/fig4_bod_averted_baseline.png` |
-| Fig. 5 | M11 | `figures/fig5_mixed_strategy.png` |
+| Fig. 4 | M08 | `figures/fig4_bod_averted_baseline.jpg` |
+| Fig. 5 | M11 | `figures/fig5_mixed_strategy.jpg` |
 | Table 1 | M12 | `tables/table1_bod_averted_shen.csv` (Daniels version also written) |
 | Fig. S1, S2, S4-S8 | M02 | `figures/figS1*`, `figS2*`, `figS4*` ... `figS8*` |
-| Fig. S3 | M05 | `figures/figS3_R0_projection.png` |
+| Fig. S3 | M05 | `figures/figS3_R0_projection.jpg` |
 | Fig. S9 | M04 | `figures/figS9_serosurvey_*` |
 | Fig. S11, Table S9 | M07 | `figures/figS11*`, `tables/tableS9*` |
 | Fig. S12, Table S12 | M06 | `figures/figS12*`, `tables/tableS12*` |

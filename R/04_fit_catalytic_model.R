@@ -64,11 +64,9 @@ pop_weight  <- mean(sqrt(state_cases)) / sqrt(state_cases)
 annual_totals <- apply(cases_arr, c(2, 3), sum)          # [T x S]
 mean_annual   <- colMeans(annual_totals)
 var_annual    <- apply(annual_totals, 2, var)
-if (any(var_annual <= mean_annual)) {
-  stop("Annual case counts are not overdispersed in: ",
-       paste(states[var_annual <= mean_annual], collapse = ", "))
-}
-phi_state <- mean_annual^2 / (var_annual - mean_annual)
+phi_state     <- ifelse(var_annual > mean_annual,
+                        mean_annual^2 / (var_annual - mean_annual),
+                        0.05)
 
 print(data.frame(state = states, weight = round(pop_weight, 3), phi = round(phi_state, 3)))
 

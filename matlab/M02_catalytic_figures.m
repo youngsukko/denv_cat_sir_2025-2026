@@ -2,7 +2,7 @@
 %  national proportion with >= 1 prior infection reported in the Results.
 %
 %  Input : data/processed (R pipeline), results_big/catalytic_*_draws.mat
-%  Output: output/figures/fig2*.png, figS1-S8*.png
+%  Output: output/figures/fig2*.jpg, figS1-S8*.jpg
 
 clear; close all; clc;
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));

@@ -7,7 +7,7 @@
 %  R0 in 2000-2025 are extrapolated separately for cfg.n_proj_years years.
 %
 %  Input : data/processed (R pipeline), results_big/catalytic_*_draws.mat
-%  Output: output/figures/figS3_R0_projection.png
+%  Output: output/figures/figS3_R0_projection.jpg
 %          results/sir_inputs.mat (small; used by M06-M12)
 
 clear; close all; clc;
@@ -53,7 +53,7 @@ for si = 1:S
 end
 nexttile(cfg.legend_tile); axis off; hold on
 h1 = plot(nan, nan, '-', 'Color', col_foi, 'LineWidth', 1.5);
-h2 = plot(nan, nan, ':', 'Color', col_foi, 'LineWidth', 1.5);
+h2 = plot(nan, nan, '--', 'Color', col_foi, 'LineWidth', 1.5);
 h3 = fill(nan, nan, col_foi, 'FaceAlpha', 0.3, 'EdgeColor', 'none');
 legend([h1 h2 h3], {'Median R_0 (estimated)', 'Median R_0 (projected)', 'IQR'}, ...
        'Location', 'northwest', 'FontSize', 11); legend('boxoff')

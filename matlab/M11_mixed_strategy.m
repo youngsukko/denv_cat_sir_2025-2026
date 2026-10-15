@@ -3,7 +3,7 @@
 %  nationwide ratios quoted in the Results (100% and 60% to children).
 %
 %  Input : results/sir_inputs.mat (M05), results/opt_allocation_shen.mat (M09)
-%  Output: output/figures/fig5_mixed_strategy.png (R0 Q50)
+%  Output: output/figures/fig5_mixed_strategy.jpg (R0 Q50)
 %          output/sim/sim_mixed_strategy.mat
 
 clear; close all; clc;
@@ -25,8 +25,9 @@ bod_names = {'case', 'hosp', 'dead', 'daly'};
 base = zeros(S, 3, 4);        % [state x R0 x outcome]
 mix  = zeros(S, 3, nW, 4);    % [state x R0 x w x outcome]
 for rc = 1:3
+    no_vacc = struct('idx', {cfg.target_ages.children, cfg.target_ages.elderly}, 'dose', {0, 0});
     for si = 1:S
-        out = sir_simulate(p, sir_in, si, rc);
+        out = sir_simulate(p, sir_in, si, rc, no_vacc);
         base(si, rc, :) = cellfun(@(f) sum(out.(f)), bod_names);
     end
     for wi = 1:nW
@@ -57,7 +58,7 @@ for m = 1:4
     a = averting_ratio(base, mix, true(S, 1), m);
     h(6) = plot(x_axis, a(FIG_R0, :), 'k--', 'LineWidth', 1.5);
     ylabel(sprintf('%s averting ratio (%%)', ylab{m}))
-    xlim([0 1]); xticks([0 0.5 1]); xticklabels({'Only\newlinechildren', '50%', 'Only\newlineelderly'})
+    xlim([0 1]); xticks([0 0.5 1]); xticklabels({})
     set(gca, 'FontName', 'SansSerif', 'FontSize', 10)
     if m == 1
         lg = legend(h, [cfg.region_short, {'Nationwide'}], 'Location', 'best', 'FontSize', 8);

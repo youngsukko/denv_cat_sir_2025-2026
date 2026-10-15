@@ -2,7 +2,7 @@
 %  Table S12, and the correlations reported in the Results.
 %
 %  Input : results/sir_inputs.mat (M05), data/processed (R pipeline)
-%  Output: output/figures/fig3*.png, figS12_bod_age_by_region.png
+%  Output: output/figures/fig3*.jpg, figS12_bod_age_by_region.jpg
 %          output/tables/tableS12_bod_per100k.csv
 %          output/sim/sim_no_vaccine.mat
 
@@ -34,6 +34,7 @@ save(fullfile(cfg.sim_dir, 'sim_no_vaccine.mat'), 'bod', 'pop_state', 'prop_le1'
 annual_rate = @(M) squeeze(sum(M, 2)) ./ pop_state * 1e5 / ny;
 
 %% Fig. 3A-D: annual burden per 100,000 by state (Q50, error bars Q25-Q75)
+ylims   = [8000 250 15 400];
 ylabels = {'Cases per 100K', 'Hospitalization per 100K', 'Deaths per 100K', 'DALYs per 100K'};
 figure('Units', 'centimeters', 'Position', [0 0 18 10], 'PaperPositionMode', 'auto');
 tiledlayout(2, 2, 'TileSpacing', 'compact', 'Padding', 'compact')
@@ -41,7 +42,7 @@ for m = 1:4
     nexttile(m)
     v = annual_rate(bod.(bod_names{m}));
     v = v(cfg.reg_order, :);
-    ymax = max(v(:, 3)) * 1.15;
+    ymax = ylims(m);
     draw_region_background(cfg, ymax, 0.5)
     bar(v(:, 2), 0.7, 'FaceColor', 'k', 'EdgeColor', [0.7 0.7 0.7], 'LineWidth', 0.5)
     errorbar(1:S, v(:, 2), v(:, 2) - v(:, 1), v(:, 3) - v(:, 2), ...
@@ -91,7 +92,8 @@ end
 save_figure(cfg, 'fig3E-F_daly_scatter')
 
 plot_region_map_inset(cfg);
-save_figure(cfg, 'fig3F_inset_region_map')
+exportgraphics(gcf, fullfile(cfg.fig_dir, 'fig3F_inset_region_map.png'), 'Resolution', 600, ...
+               'BackgroundColor', 'none');
 
 %% Fig. S12: age distribution of the burden by region (Q50)
 titles = {'Case proportion by age', 'Hospitalization proportion by age', ...

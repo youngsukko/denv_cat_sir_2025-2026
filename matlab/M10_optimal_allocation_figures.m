@@ -4,7 +4,7 @@
 %
 %  Input : results/opt_allocation_{shen,daniels}.mat (M09), results/sir_inputs.mat (M05),
 %          data/processed
-%  Output: output/figures/figS14-S18_*.png
+%  Output: output/figures/figS14-S18_*.jpg
 %          output/tables/allocation_correlations.csv, daniels_shen_similarity.csv
 
 clear; close all; clc;

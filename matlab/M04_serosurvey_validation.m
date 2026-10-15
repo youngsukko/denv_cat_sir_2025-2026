@@ -7,7 +7,7 @@
 %    'range'    a single min-max band over all ages
 %
 %  Input : results_big/catalytic_ppc_draws.mat
-%  Output: output/figures/figS9_serosurvey_<region>.png
+%  Output: output/figures/figS9_serosurvey_<region>.jpg
 
 clear; close all; clc;
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));

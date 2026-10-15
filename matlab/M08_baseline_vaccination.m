@@ -3,7 +3,7 @@
 %  Fig. S13 (Daniels vs Shen VE) and Table S10.
 %
 %  Input : results/sir_inputs.mat (M05), matlab/data/vaccine_doses_by_state_2024_2025.csv
-%  Output: output/figures/fig4_bod_averted_baseline.png, figS13_*.png
+%  Output: output/figures/fig4_bod_averted_baseline.jpg, figS13_*.jpg
 %          output/tables/tableS10_vaccine_distribution.csv
 %          output/sim/sim_baseline_vaccination.mat
 
@@ -14,7 +14,7 @@ obs    = load_observed_data(cfg);
 sir_in = load(cfg.file_sir_inputs);
 
 S = cfg.S; A5 = cfg.A5;
-[doses_annual, doses_distributed] = brazil_dose_allocation(cfg);
+doses_annual = brazil_dose_allocation(cfg);
 vactot = cfg.annual_doses * cfg.n_sim_years / 1000;   % thousands vaccinated over the horizon
 bod_names = {'case', 'hosp', 'dead', 'daly'};
 
@@ -33,8 +33,8 @@ for vi = 1:2
                 out = sir_simulate(p, sir_in, si, rc);
                 for m = 1:4; base.(bod_names{m})(si, :, rc) = out.(bod_names{m}); end
             end
-            groups = struct('idx', cfg.target_ages.children, 'dose', doses_annual(si));
-            out = sir_simulate(p, sir_in, si, rc, groups);
+            vacc_in = struct('vacc', doses_annual(si), 'vacorder', cfg.vacorder.children);
+            out = sir_simulate(p, sir_in, si, rc, vacc_in);
             for m = 1:4; vacc.(bod_names{m})(si, :, rc, vi) = out.(bod_names{m}); end
         end
     end
@@ -122,10 +122,14 @@ for m = 1:4
     end
 end
 
-%% Table S10: 2024/25 distribution and doses per 1,000 children (5-14 y) per year
+%% Table S10: vaccine distribution by state and per 1,000 children (5-14 y)
 children_pop = sum(obs.pop_2025(:, cfg.target_ages.children), 2);
-o = cfg.reg_order;
-tbl = table(doses_distributed(o), round(doses_annual(o)), round(doses_annual(o) ./ children_pop(o) * 1000, 2), ...
-            'VariableNames', {'doses_distributed_2024_25', 'doses_per_year_5M', 'doses_per_year_per1000_children'}, ...
-            'RowNames', cfg.state_codes(o));
-writetable(tbl, fullfile(cfg.table_dir, 'tableS10_vaccine_distribution.csv'), 'WriteRowNames', true)
+c = cell(S, 2);
+for k = 1:S
+    si = cfg.reg_order(k);
+    c{k, 1} = sprintf('%.0f', doses_annual(si));
+    c{k, 2} = sprintf('%.2f', doses_annual(si) / children_pop(si) * 1000);
+end
+writetable(cell2table(c, 'VariableNames', {'doses_total', 'doses_per1000_children'}, ...
+           'RowNames', cfg.state_codes(cfg.reg_order)), ...
+           fullfile(cfg.table_dir, 'tableS10_vaccine_distribution.csv'), 'WriteRowNames', true)
