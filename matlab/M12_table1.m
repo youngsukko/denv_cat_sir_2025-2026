@@ -110,11 +110,11 @@ for st = 2:3
         sel  = strcmp(long_tbl.strategy, strategy_names{st}) & strcmp(long_tbl.outcome, bod_names{m});
         shen = sel & strcmp(long_tbl.VE, 'Shen');
         v_sh = long_tbl.pct_change_vs_baseline_per1000(shen);   % Q25, Q50, Q75
-        v_all = long_tbl.pct_change_vs_baseline_per1000(sel);
+        v_all = long_tbl.pct_change_vs_baseline_per1000(sel & ~strcmp(long_tbl.R0, 'q50'));   % Q25/Q75, both VE
         rows(end+1, :) = {sprintf('%s, %s per 1,000 vaccinated vs baseline (%%), Shen', strategy_names{st}, bod_names{m}), ...
-                          v_sh(2), min(v_sh([1 3])), max(v_sh([1 3])), 'Q50 [range over R0]'}; %#ok<SAGROW>
+                          v_sh(2), min(v_sh([1 3])), max(v_sh([1 3])), 'Q50 [range over R0 Q25-Q75]'}; %#ok<SAGROW>
         rows(end+1, :) = {sprintf('%s, %s per 1,000 vaccinated vs baseline (%%), Shen and Daniels', strategy_names{st}, bod_names{m}), ...
-                          v_sh(2), min(v_all), max(v_all), 'Shen Q50 [range over R0 and VE]'}; %#ok<SAGROW>
+                          v_sh(2), min(v_all), max(v_all), 'Shen Q50 [range over R0 Q25-Q75 and VE]'}; %#ok<SAGROW>
     end
 end
 target_pop = [sum(obs.pop_2025(:, cfg.target_ages.children), 'all'), sum(obs.pop_2025(:, cfg.target_ages.elderly), 'all'), ...
