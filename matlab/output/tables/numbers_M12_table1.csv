@@ -1,0 +1,14 @@
+item,value,lo,hi,note
+"Children, DALY-optimized, daly per 1,000 vaccinated vs baseline (%), Shen",14.8410815641037,12.8750820208556,13.2772372622369,Q50 [range over R0]
+"Children, DALY-optimized, daly per 1,000 vaccinated vs baseline (%), Shen and Daniels",14.8410815641037,8.96253930603281,14.8410815641037,Shen Q50 [range over R0 and VE]
+"Children, DALY-optimized, dead per 1,000 vaccinated vs baseline (%), Shen",13.9402629600575,11.6343977329887,11.9650809597286,Q50 [range over R0]
+"Children, DALY-optimized, dead per 1,000 vaccinated vs baseline (%), Shen and Daniels",13.9402629600575,6.88150087253385,13.9402629600575,Shen Q50 [range over R0 and VE]
+"Elderly, DALY-optimized, daly per 1,000 vaccinated vs baseline (%), Shen",-30.0681161553684,-30.8734137757516,-23.3079077082788,Q50 [range over R0]
+"Elderly, DALY-optimized, daly per 1,000 vaccinated vs baseline (%), Shen and Daniels",-30.0681161553684,-30.8734137757516,-23.3079077082788,Shen Q50 [range over R0 and VE]
+"Elderly, DALY-optimized, dead per 1,000 vaccinated vs baseline (%), Shen",225.36427024217,198.127517952816,276.031080647133,Q50 [range over R0]
+"Elderly, DALY-optimized, dead per 1,000 vaccinated vs baseline (%), Shen and Daniels",225.36427024217,198.127517952816,276.031080647133,Shen Q50 [range over R0 and VE]
+"Coverage: doses per year / 2025 population, children (5-14), 5M per year (%)",17.2974576681048,NaN,NaN,over 5 years: 86.5%
+"Coverage: doses per year / 2025 population, elderly (60+), 5M per year (%)",13.9662709528631,NaN,NaN,over 5 years: 69.8%
+"Coverage: doses per year / 2025 population, ages 5-59, 10M per year (%)",5.90510625344079,NaN,NaN,over 5 years: 29.5%
+"Coverage: doses per year / 2025 population, ages 5-59, 20M per year (%)",11.8102125068816,NaN,NaN,over 5 years: 59.1%
+"Coverage: doses per year / 2025 population, ages 5-59, 30M per year (%)",17.7153187603224,NaN,NaN,over 5 years: 88.6%
