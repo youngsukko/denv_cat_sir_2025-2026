@@ -88,10 +88,16 @@ The SIR-type model only needs the small `results/sir_inputs.mat` written by M05
 (posterior medians of the 2026 immune profile, age multipliers and projected
 reproduction numbers), so M06-M12 run without `results_big/`.
 
-**Availability.** Because of their size, the `results_big/` files used for the
-paper are not included in this repository. A download link will be added here
-soon; in the meantime, they are available on request from Youngsuk Ko
-(yko@berkeley.edu).
+**Download.** Because of their size, the `results_big/` files used for the
+paper are not included in this repository. Fitting the catalytic model is
+computationally demanding: we ran it on a 128-core high-performance
+workstation, where the run time was manageable, but reproducing the fit on a
+personal computer would take a very long time. The three files above can
+instead be downloaded from
+[this shared folder](https://1drv.ms/f/c/ca3ee35878ee3566/IgBZE_nzOrrDTa8a2EluSa2uASsZPYxNOIs1UlBNLIhjvhE?e=xYVD2A).
+Place them in `results_big/` without renaming them; the MATLAB scripts can
+then be run directly, skipping `R/04` and `R/05`. If the link is unavailable,
+please contact Youngsuk Ko (yko@berkeley.edu).
 
 ## How to run
 
