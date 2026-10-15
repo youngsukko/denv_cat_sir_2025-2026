@@ -1,0 +1,9 @@
+item,value,lo,hi,note
+"Nationwide Case averting ratio (%), 100% to children",2.75685577674944,2.30697431332352,3.14122121110406,Q50 [range over R0 Q25-Q75]
+"Nationwide Hospitalization averting ratio (%), 100% to children",3.53787932017127,3.00781258430586,4.01892703996454,Q50 [range over R0 Q25-Q75]
+"Nationwide Fatality averting ratio (%), 100% to children",1.54198827997261,1.2307357345986,1.8519345485225,Q50 [range over R0 Q25-Q75]
+"Nationwide DALY averting ratio (%), 100% to children",2.89158626383566,2.371410054116,3.36378019647285,Q50 [range over R0 Q25-Q75]
+"Nationwide Case averting ratio (%), 60% to children",2.14899351908135,1.84365541660321,2.44202538979777,Q50 [range over R0 Q25-Q75]
+"Nationwide Hospitalization averting ratio (%), 60% to children",3.06328605746866,2.69106882981801,3.48819433599915,Q50 [range over R0 Q25-Q75]
+"Nationwide Fatality averting ratio (%), 60% to children",2.88744255167161,2.64138143902174,3.34008113957625,Q50 [range over R0 Q25-Q75]
+"Nationwide DALY averting ratio (%), 60% to children",2.56899688952909,2.1991190681555,2.974004529836,Q50 [range over R0 Q25-Q75]

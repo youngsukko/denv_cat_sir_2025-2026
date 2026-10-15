@@ -1,0 +1,3 @@
+item,value,lo,hi,note
+"National % with >= 1 prior infection, start of 2000",26.8635441118745,20.1159233003183,35.6727349022384,"median [95% CrI], population-weighted"
+"National % with >= 1 prior infection, end of 2025",83.2565829799213,78.8328896680048,86.9333026873184,"median [95% CrI], population-weighted"

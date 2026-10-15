@@ -1,4 +1,21 @@
+# R / RStudio
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+
+# Raw downloads (SINAN line lists, municipal population); see README
+data/raw/
+
+# Large posterior outputs; place them locally (see README)
+results_big/
+
+# Stan build artifacts (cmdstanr compiles next to the .stan file)
+stan/*
+!stan/*.stan
+
+# MATLAB outputs (figures and simulation files); CSV tables are tracked for review
+matlab/output/*
+!matlab/output/tables/
+*.asv
+*.m~

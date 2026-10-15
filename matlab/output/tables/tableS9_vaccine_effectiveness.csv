@@ -1,0 +1,4 @@
+Row,Shen_lt1y_neg,Shen_lt1y_pos,Shen_lt5y_neg,Shen_lt5y_pos,Shen_gt5y_neg,Shen_gt5y_pos,Daniels_lt1y_neg,Daniels_lt1y_pos,Daniels_lt5y_neg,Daniels_lt5y_pos,Daniels_gt5y_neg,Daniels_gt5y_pos
+Infection,0.28,0.36,0.2,0.27,0.12,0.16,0.17,0.48,0.1,0.18,0.02,0.02
+Disease,0.56,0.72,0.41,0.53,0.23,0.32,0.82,0.93,0.53,0.72,-0.17,0.18
+Hospitalization,0.84,0.84,0.84,0.84,0.84,0.84,0.98,0.98,0.8,0.88,-0.08,0.38

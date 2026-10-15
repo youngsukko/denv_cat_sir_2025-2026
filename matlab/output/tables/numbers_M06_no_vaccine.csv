@@ -1,0 +1,3 @@
+item,value,lo,hi,note
+Correlation r: past 10-year incidence vs annual DALYs per 100K,0.244198234956687,NaN,NaN,p = 0.2196
+Correlation r: proportion <= 1 prior infection (2026) vs annual DALYs per 100K,0.788806961484244,NaN,NaN,p = 1.018e-06
