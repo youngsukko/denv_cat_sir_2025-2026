@@ -5,7 +5,8 @@
 %  This step is slow and its result can differ slightly between runs, so the
 %  allocations are saved in results/ (tracked by git) and read by M10-M12.
 %  Each case is written as soon as it finishes; set the *_TO_RUN lists to
-%  run a subset.
+%  run a subset, e.g. one combination per MATLAB session in parallel.
+%  Delete results/opt_allocation_*.mat first to start from empty files.
 %
 %  Input : results/sir_inputs.mat (M05)
 %  Output: results/opt_allocation_shen.mat, results/opt_allocation_daniels.mat
@@ -39,14 +40,6 @@ for vi = 1:numel(VE_TO_RUN)
     out_file = cfg.file_opt(ve_name);
     inputs   = sir_base_parameters(cfg, sir_in, ve_name);
 
-    if isfile(out_file)
-        res = load(out_file);
-    else
-        res.doses_opt   = nan(S, 3, 2);   % doses per year by state [S x R0 x target]
-        res.daly_opt    = nan(3, 2);      % national DALYs over the horizon, optimal allocation
-        res.daly_brazil = nan(3, 2);      % same at the starting point x0 = 1 (equal coverage)
-    end
-
     for tc = TARGETS_TO_RUN
         for rc = R0_TO_RUN
             fprintf('\n=== VE %s | %s | R0 %s ===\n', ve_name, cfg.target_names{tc}, cfg.R0_names{rc});
@@ -56,12 +49,22 @@ for vi = 1:numel(VE_TO_RUN)
 
             x0 = ones(S, 1);
             [x_opt, daly_opt_val] = fmincon(obj, x0, [], [], [], [], zeros(S, 1), [], [], opts);
+            daly_x0 = obj(x0);
+            fprintf('DALYs: start (x0 = 1) %.1f, optimal %.1f (%.2f%% lower)\n', daly_x0, ...
+                    daly_opt_val, 100 * (1 - daly_opt_val / daly_x0));
 
+            % reload just before saving, so that several MATLAB sessions running
+            % different cases at the same time do not overwrite each other
+            if isfile(out_file)
+                res = load(out_file);
+            else
+                res.doses_opt   = nan(S, 3, 2);   % doses per year by state [S x R0 x target]
+                res.daly_opt    = nan(3, 2);      % national DALYs over the horizon, optimal allocation
+                res.daly_brazil = nan(3, 2);      % same at the starting point x0 = 1 (equal coverage)
+            end
             res.doses_opt(:, rc, tc) = to_doses(x_opt);
             res.daly_opt(rc, tc)     = daly_opt_val;
-            res.daly_brazil(rc, tc)  = obj(x0);
-            fprintf('DALYs: start (x0 = 1) %.1f, optimal %.1f (%.2f%% lower)\n', res.daly_brazil(rc, tc), ...
-                    daly_opt_val, 100 * (1 - daly_opt_val / res.daly_brazil(rc, tc)));
+            res.daly_brazil(rc, tc)  = daly_x0;
 
             res.popbystate          = popbystate;
             res.doses_annual_brazil = doses_annual_brazil;
