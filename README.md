@@ -88,6 +88,11 @@ The SIR-type model only needs the small `results/sir_inputs.mat` written by M05
 (posterior medians of the 2026 immune profile, age multipliers and projected
 reproduction numbers), so M06-M12 run without `results_big/`.
 
+**Availability.** Because of their size, the `results_big/` files used for the
+paper are not included in this repository. A download link will be added here
+soon; in the meantime, they are available on request from Youngsuk Ko
+(yko@berkeley.edu).
+
 ## How to run
 
 R, from the project root (open `denv_cat_sir_2025-2026.Rproj`):
