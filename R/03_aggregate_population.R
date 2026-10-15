@@ -13,7 +13,7 @@ library(dplyr)
 library(tidyr)
 library(readr)
 
-# ── 1. Municipality-level population (downloaded once, then cached) ──
+# -- 1. Municipality-level population (downloaded once, then cached) --
 cache_file <- file.path(DIR_RAW_POP, "pop_mun_age_datasus.rds")
 if (!file.exists(cache_file)) {
   dir.create(DIR_RAW_POP, showWarnings = FALSE, recursive = TRUE)
@@ -22,7 +22,7 @@ if (!file.exists(cache_file)) {
 }
 pop_all_raw <- readRDS(cache_file)
 
-# ── 2. brpop age labels -> five-year bands used for the case data ──
+# -- 2. brpop age labels -> five-year bands used for the case data --
 age_label_map <- c(
   "From 0 to 4 years"     = "0-4",
   "From 5 to 9 years"     = "5-9",
@@ -44,7 +44,7 @@ age_label_map <- c(
 )
 stopifnot(identical(unname(age_label_map), AGE_LABELS))
 
-# ── 3. Aggregate municipalities -> state x year x age group ────────
+# -- 3. Aggregate municipalities -> state x year x age group --------
 pop_state <- pop_all_raw |>
   filter(age_group != "Total") |>
   mutate(
@@ -56,7 +56,7 @@ pop_state <- pop_all_raw |>
   group_by(uf, year, age_group = age_group_new) |>
   summarise(pop = sum(pop, na.rm = TRUE), .groups = "drop")
 
-# ── 4. Linear extrapolation beyond the last observed year ─────────
+# -- 4. Linear extrapolation beyond the last observed year ---------
 last_real_year <- max(pop_state$year)
 if (last_real_year < YEAR_MAX) {
   anchor_year <- last_real_year - 2L

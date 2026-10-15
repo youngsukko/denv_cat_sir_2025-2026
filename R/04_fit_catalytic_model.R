@@ -14,7 +14,7 @@ library(dplyr)
 library(readr)
 library(cmdstanr)
 
-# ── Sampler settings (Methods) ─────────────────────────────────────
+# -- Sampler settings (Methods) -------------------------------------
 N_CHAINS          <- 4
 ITER_WARMUP       <- 500
 ITER_SAMPLING     <- 500
@@ -29,7 +29,7 @@ A1    <- 81                                   # single-year cohorts 0..80+
 band_of_age <- c(rep(1:16, each = 5), 17)
 stopifnot(length(band_of_age) == A1)
 
-# ── 1. Data ────────────────────────────────────────────────────────
+# -- 1. Data --------------------------------------------------------
 case_summary <- read_csv(FILE_CASES, col_types = cols(uf = "c", year = "i",
                                                       age_group = "c", cases = "i"))
 pop_state    <- read_csv(FILE_POP, col_types = cols(uf = "c", year = "i",
@@ -56,11 +56,11 @@ pop_arr[idx_pop] <- pmax(pop_filt$pop, 1.0)
 
 cat("Total cases", YEAR_MIN, "-", YEAR_MAX, ":", sum(cases_arr), "\n")
 
-# ── 2. State weights: inverse square root of total cases (mean 1) ──
+# -- 2. State weights: inverse square root of total cases (mean 1) --
 state_cases <- apply(cases_arr, 3, sum)
 pop_weight  <- mean(sqrt(state_cases)) / sqrt(state_cases)
 
-# ── 3. Overdispersion phi_s, method of moments on annual total cases ──
+# -- 3. Overdispersion phi_s, method of moments on annual total cases --
 annual_totals <- apply(cases_arr, c(2, 3), sum)          # [T x S]
 mean_annual   <- colMeans(annual_totals)
 var_annual    <- apply(annual_totals, 2, var)
@@ -84,7 +84,7 @@ stan_data <- list(
   phi_fixed   = as.array(phi_state)
 )
 
-# ── 4. Compile and sample ──────────────────────────────────────────
+# -- 4. Compile and sample ------------------------------------------
 mod <- cmdstan_model(
   FILE_STAN_MODEL,
   cpp_options = list(stan_threads = TRUE,
@@ -123,7 +123,7 @@ fit <- mod$sample(
 fit$save_object(FILE_FIT)
 cat("Saved:", FILE_FIT, "\n")
 
-# ── 5. Quick look ──────────────────────────────────────────────────
+# -- 5. Quick look --------------------------------------------------
 print(fit$diagnostic_summary())
 print(fit$summary("kappa_age") |> mutate(age = AGE_LABELS))
 print(fit$summary("omega_age") |> mutate(age = AGE_LABELS))

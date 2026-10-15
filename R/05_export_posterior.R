@@ -24,7 +24,7 @@ A5     <- length(AGE_LABELS)
 states <- sort(unique(read_csv(FILE_CASES, col_types = cols(uf = "c"))$uf))
 S      <- length(states)
 
-# ── 1. MCMC diagnostics (S3-1) ─────────────────────────────────────
+# -- 1. MCMC diagnostics (S3-1) -------------------------------------
 dir.create(DIR_RESULTS, showWarnings = FALSE)
 
 sampler_diag <- as.data.frame(fit$diagnostic_summary()) |>
@@ -42,7 +42,7 @@ cat("\nmax R-hat:", round(max(conv_diag$rhat), 3),
 cat("Parameters with R-hat > 1.05 or ESS < 400:\n")
 print(conv_diag |> filter(rhat > 1.05 | ess_bulk < 400 | ess_tail < 400), n = Inf)
 
-# ── 2. Draw extraction helpers ─────────────────────────────────────
+# -- 2. Draw extraction helpers -------------------------------------
 # For array[A5, T, S] Stan variables the draws_matrix columns run with the
 # first index fastest, so filling array(dim = c(n_draw, A5, T, S)) keeps the
 # Stan index order.
@@ -63,7 +63,7 @@ extract_2d <- function(varname) {
 to_matlab_3d <- function(x) aperm(x, c(1, 4, 3, 2))
 to_matlab_2d <- function(x) aperm(x, c(1, 3, 2))
 
-# ── 3. Immune profiles, predicted cases, total infections ─────────
+# -- 3. Immune profiles, predicted cases, total infections ---------
 cases_pred <- extract_3d("cases_pred")
 
 cum_cases_age <- array(0, dim = c(n_draw, S, A5))   # cumulative 2000-2025 predicted cases
@@ -89,7 +89,7 @@ writeMat(FILE_PPC_MAT,
          cum_cases_age       = cum_cases_age)                             # [n_draw x S x A5]
 cat("Saved:", FILE_PPC_MAT, "\n")
 
-# ── 4. Parameters, normalized to the 0-4 age group ────────────────
+# -- 4. Parameters, normalized to the 0-4 age group ----------------
 # Only the products kappa_a * lambda enter the likelihood, so kappa is
 # reported relative to kappa[1] (0-4 years) and lambda, lambda_pre are
 # rescaled by kappa[1] to keep the products unchanged.

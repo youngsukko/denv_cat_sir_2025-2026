@@ -16,7 +16,7 @@ library(tidyr)
 library(purrr)
 library(readr)
 
-# ── Age parsing ────────────────────────────────────────────────────
+# -- Age parsing ----------------------------------------------------
 # New layout: 4-digit code, first digit is the unit
 # (4 = years, 3 = months, 2 = days, 1 = hours)
 parse_age_new <- function(x) {
@@ -41,7 +41,7 @@ parse_age_old <- function(x) {
   )
 }
 
-# ── Read one yearly file into a common layout ─────────────────────
+# -- Read one yearly file into a common layout ---------------------
 read_one_csv <- function(f) {
   message("Reading ", basename(f), " ...")
   all_cols <- names(fread(f, nrows = 0))
@@ -72,7 +72,7 @@ df_raw <- map(csv_files, read_one_csv) |>
   mutate(across(everything(), as.character))
 cat("Rows read:", nrow(df_raw), "\n")
 
-# ── Keep confirmed cases (laboratory or clinical-epidemiological) ──
+# -- Keep confirmed cases (laboratory or clinical-epidemiological) --
 confirmed_codes <- c("1", "2", "3", "4", "10", "11", "12")
 
 df_filtered <- df_raw |>
@@ -80,7 +80,7 @@ df_filtered <- df_raw |>
          CRITERIO   %in% c("1", "2"))
 cat("Rows after confirmation filter:", nrow(df_filtered), "\n")
 
-# ── Year, age group and state ──────────────────────────────────────
+# -- Year, age group and state --------------------------------------
 df_clean <- df_filtered |>
   mutate(
     year = as.integer(substr(DT_NOTIFIC, 1, 4)),
@@ -106,7 +106,7 @@ df_clean <- df_filtered |>
 cat("\nConfirmed cases by year:\n")
 df_clean |> count(year) |> print(n = 30)
 
-# ── Aggregate: year x age group x state (zero-filled) ─────────────
+# -- Aggregate: year x age group x state (zero-filled) -------------
 case_summary <- df_clean |>
   count(year, age_group, uf, name = "cases") |>
   complete(year = YEAR_MIN:YEAR_MAX, age_group, uf = UF_CODES$uf,
