@@ -39,14 +39,13 @@ matlab/
 
 ## Requirements
 
-The analysis was run on Windows.
+The analysis was run on Windows with the versions below.
 
-- **R** (>= 4.3) with `data.table`, `dplyr`, `tidyr`, `purrr`, `readr`, `posterior`,
-  `R.matlab`, `brpop`, and `cmdstanr` with a CmdStan installation (>= 2.33,
-  `cmdstanr::install_cmdstan()`).
-- **MATLAB** R2024b (the version used for the paper) with the Statistics and
-  Machine Learning, Optimization and Mapping toolboxes (Parallel Computing
-  Toolbox is optional for M09).
+- **R** 4.5.3 with `data.table`, `dplyr`, `tidyr`, `purrr`, `readr`, `posterior`,
+  `R.matlab`, `brpop`, and `cmdstanr` 0.9.0.9001 with CmdStan 2.38.0
+  (`cmdstanr::install_cmdstan()`).
+- **MATLAB** R2024b with the Statistics and Machine Learning, Optimization and
+  Mapping toolboxes (Parallel Computing Toolbox is optional for M09).
 - **Hardware.** The MATLAB scripts run on a standard desktop computer; the
   allocation optimization (M09) takes several hours. The catalytic model fit
   (`R/04`) was run on a 128-core workstation and would take a very long time on
