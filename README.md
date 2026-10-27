@@ -106,7 +106,7 @@ computationally demanding: we ran it on a 128-core high-performance
 workstation, where the run time was manageable, but reproducing the fit on a
 personal computer would take a very long time. The three files above can
 instead be downloaded from
-[this shared folder](https://1drv.ms/f/c/ca3ee35878ee3566/IgBZE_nzOrrDTa8a2EluSa2uASsZPYxNOIs1UlBNLIhjvhE?e=xYVD2A).
+[this shared folder](https://1drv.ms/f/c/ca3ee35878ee3566/IgBZE_nzOrrDTa8a2EluSa2uASsZPYxNOIs1UlBNLIhjvhE?e=shOizm).
 Place them in `results_big/` without renaming them; the MATLAB scripts can
 then be run directly, skipping `R/04` and `R/05`. If the link is unavailable,
 please contact Youngsuk Ko (yko@berkeley.edu).
