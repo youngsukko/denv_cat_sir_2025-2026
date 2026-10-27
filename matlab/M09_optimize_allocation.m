@@ -16,12 +16,9 @@ addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
 cfg    = project_config();
 sir_in = load(cfg.file_sir_inputs);
 
-% VE_TO_RUN      = {'shen', 'daniels'};
-% TARGETS_TO_RUN = 1:2;      % 1 = children (5-14 y), 2 = elderly (60+ y)
-% R0_TO_RUN      = 1:3;      % Q25, Q50, Q75
-VE_TO_RUN      = {'daniels'};
-TARGETS_TO_RUN = 2;      % 1 = children (5-14 y), 2 = elderly (60+ y)
-R0_TO_RUN      = 3;      % Q25, Q50, Q75
+VE_TO_RUN      = {'shen', 'daniels'};
+TARGETS_TO_RUN = 1:2;      % 1 = children (5-14 y), 2 = elderly (60+ y)
+R0_TO_RUN      = 1:3;      % Q25, Q50, Q75
 
 S = cfg.S;
 target_vacorder = [cfg.vacorder.children, cfg.vacorder.elderly];

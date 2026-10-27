@@ -23,7 +23,7 @@ R/                    catalytic model pipeline (run from the project root)
   02_aggregate_cases.R  confirmed cases, year x age x state -> data/processed/
   03_aggregate_population.R  population, year x age x state -> data/processed/
   04_fit_catalytic_model.R   fit the Stan model            -> results_big/catalytic_fit.rds
-  05_export_posterior.R      export draws for MATLAB       -> results_big/*.mat, results/mcmc_*.csv
+  05_export_posterior.R      export draws for MATLAB       -> results_big/*.mat
 stan/dengue_catalytic.stan   catalytic model
 data/processed/       aggregated case and population counts (tracked)
 data/raw/             raw downloads (not tracked)
@@ -34,16 +34,29 @@ matlab/
   run_all.m           runs M01-M12 in order
   functions/          model and plotting functions; project_config.m holds all paths
   data/               life table, birth rate, vaccine distribution, IBGE state shapefile
-  output/             figures, tables and simulation files (not tracked)
+  output/             figures and simulation files (not tracked), tables (tracked)
 ```
 
 ## Requirements
 
+The analysis was run on Windows.
+
 - **R** (>= 4.3) with `data.table`, `dplyr`, `tidyr`, `purrr`, `readr`, `posterior`,
-  `R.matlab`, `brpop`, and `cmdstanr` with a CmdStan installation
-  (`cmdstanr::install_cmdstan()`).
-- **MATLAB** R2022a or later with the Statistics and Machine Learning, Optimization
-  and Mapping toolboxes (Parallel Computing Toolbox is optional for M09).
+  `R.matlab`, `brpop`, and `cmdstanr` with a CmdStan installation (>= 2.33,
+  `cmdstanr::install_cmdstan()`).
+- **MATLAB** R2024b (the version used for the paper) with the Statistics and
+  Machine Learning, Optimization and Mapping toolboxes (Parallel Computing
+  Toolbox is optional for M09).
+- **Hardware.** The MATLAB scripts run on a standard desktop computer; the
+  allocation optimization (M09) takes several hours. The catalytic model fit
+  (`R/04`) was run on a 128-core workstation and would take a very long time on
+  a personal computer; its results can be downloaded instead (see
+  [Large files](#large-files-results_big)).
+
+**Installation.** Install R and MATLAB, then the R packages above and CmdStan
+(`cmdstanr::install_cmdstan()`, which compiles CmdStan). This typically takes
+15-30 minutes. No further installation is needed; clone or download this
+repository and run the scripts as described below.
 
 ## Data
 
@@ -143,10 +156,13 @@ differ slightly between runs; they are tracked so that M10-M12 reproduce the pap
 | Fig. S13, Table S10 | M08 | `figures/figS13_*`, `tables/tableS10*` |
 | Fig. S14-S18 | M10 | `figures/figS14*` ... `figS18*` |
 | Tables S1-S7 | M03 | `tables/tableS1*` ... `tableS7*` |
-| MCMC diagnostics (Appendix S3-1) | R/05 | `results/mcmc_*_diagnostics.csv` |
 
 Fig. 1 (workflow), Fig. S10 (model diagram) and Tables S8 and S11 (parameter
 values) were prepared by hand; the parameter values are set in
 `matlab/functions/sir_base_parameters.m`. Multi-panel figures are exported panel
 by panel and were assembled, with panel letters and region shading of the state
 panel maps, outside MATLAB.
+
+## License
+
+The code is released under the MIT License (see `LICENSE`).
