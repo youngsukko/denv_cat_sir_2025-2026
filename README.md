@@ -46,11 +46,15 @@ The analysis was run on Windows with the versions below.
   (`cmdstanr::install_cmdstan()`).
 - **MATLAB** R2024b with the Statistics and Machine Learning, Optimization and
   Mapping toolboxes (Parallel Computing Toolbox is optional for M09).
-- **Hardware.** The MATLAB scripts run on a standard desktop computer; the
-  allocation optimization (M09) takes several hours. The catalytic model fit
-  (`R/04`) was run on a 128-core workstation and would take a very long time on
-  a personal computer; its results can be downloaded instead (see
-  [Large files](#large-files-results_big)).
+- **Hardware.** The MATLAB simulations run quickly on a standard desktop
+  computer; only the allocation optimization (M09) takes several hours. The
+  catalytic model fit (`R/04`) took about 1 hour on a 128-core workstation and
+  is expected to take about a day on a typical personal computer; its results
+  can be downloaded instead (see [Large files](#large-files-results_big)).
+
+**Quick check.** With only the files in this repository (no downloads), run
+`M06_sir_no_vaccine.m` in MATLAB. It simulates the 2026-2030 burden of disease
+without vaccination and writes Fig. 3 and Table S12 to `matlab/output/`.
 
 **Installation.** Install R and MATLAB, then the R packages above and CmdStan
 (`cmdstanr::install_cmdstan()`, which compiles CmdStan). This typically takes
@@ -119,7 +123,7 @@ R, from the project root (open `denv_cat_sir_2025-2026.Rproj`):
 source("R/01_download_sinan.R")         # optional, data/processed is tracked
 source("R/02_aggregate_cases.R")        # optional
 source("R/03_aggregate_population.R")   # optional
-source("R/04_fit_catalytic_model.R")    # several hours
+source("R/04_fit_catalytic_model.R")    # ~1 h on 128 cores, ~1 day on a PC
 source("R/05_export_posterior.R")
 ```
 
